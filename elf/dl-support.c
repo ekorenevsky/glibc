@@ -141,6 +141,8 @@ void *_dl_random;
 
 size_t _dl_pagesize = EXEC_PAGESIZE;
 
+int _dl_aslr;
+
 size_t _dl_minsigstacksize = CONSTANT_MINSIGSTKSZ;
 
 int _dl_inhibit_cache;

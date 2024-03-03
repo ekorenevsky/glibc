@@ -596,6 +596,7 @@ DEFINES
 static_nss
 profile
 libc_cv_multidir
+aslr
 shared
 static
 ldd_rewrite_script
@@ -766,6 +767,7 @@ with_nonshared_cflags
 with_rtld_early_cflags
 with_timeoutfactor
 enable_sanity_checks
+enable_aslr
 enable_shared
 enable_profile
 enable_default_pie
@@ -1433,6 +1435,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-sanity-checks really do not use threads (should not be used except
                           in special situations) [default=yes]
+  --enable-aslr           build ld.so loader with ASLR suport [default=no]
   --enable-shared         build shared library [default=yes if GNU ld]
   --enable-profile        build profiled library [default=no]
   --disable-default-pie   Do not build glibc programs and the testsuite as PIE
@@ -3431,6 +3434,13 @@ else
   enable_sanity=yes
 fi
 
+
+# Check whether --enable-aslr was given.
+if test "${enable_aslr+set}" = set; then :
+  enableval=$enable_aslr; aslr=$enableval
+else
+  aslr=no
+fi
 
 # Check whether --enable-shared was given.
 if test "${enable_shared+set}" = set; then :

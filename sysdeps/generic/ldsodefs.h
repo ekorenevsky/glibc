@@ -588,6 +588,9 @@ struct rtld_global_ro
   /* If nonzero print warnings messages.  */
   EXTERN int _dl_verbose;
 
+  /* If nonzero apply ASLR adjustments.  */
+  EXTERN int _dl_aslr;
+
   /* File descriptor to write debug messages to.  */
   EXTERN int _dl_debug_fd;
 

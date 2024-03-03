@@ -62,6 +62,7 @@ dl-routines = \
   dl-fini \
   dl-init \
   dl-load \
+  dl-aslr \
   dl-lookup \
   dl-lookup-direct \
   dl-minimal-malloc \

@@ -182,6 +182,12 @@ AC_ARG_ENABLE([sanity-checks],
 	      [enable_sanity=$enableval],
 	      [enable_sanity=yes])
 
+AC_ARG_ENABLE([aslr],
+	      AS_HELP_STRING([--enable-aslr],
+			     [build ld.so loader with ASLR support @<:@default=no@:>@]),
+	      [aslr=$enableval],
+	      [shared=no])
+
 AC_ARG_ENABLE([shared],
 	      AS_HELP_STRING([--enable-shared],
 			     [build shared library @<:@default=yes if GNU ld@:>@]),

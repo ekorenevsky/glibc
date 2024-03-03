@@ -64,7 +64,13 @@
 ELF_PREFERRED_ADDRESS_DATA;
 #endif
 #ifndef ELF_PREFERRED_ADDRESS
+#ifdef ASLR
+#include <dl-aslr.h>
+# define ELF_PREFERRED_ADDRESS(loader, maplength, mapstartpref) \
+  (GLRO(dl_aslr) ? aslr_get_hint (maplength) : (mapstartpref))
+#else
 # define ELF_PREFERRED_ADDRESS(loader, maplength, mapstartpref) (mapstartpref)
+#endif
 #endif
 #ifndef ELF_FIXED_ADDRESS
 # define ELF_FIXED_ADDRESS(loader, mapstart) ((void) 0)

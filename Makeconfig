@@ -1010,6 +1010,10 @@ ifneq (no,$(have-tunables))
 CPPFLAGS += -DTOP_NAMESPACE=glibc
 endif
 
+ifeq (yes,$(aslr))
+CPPFLAGS += -DASLR
+endif
+
 override CFLAGS	= -std=gnu11 -fgnu89-inline $(config-extra-cflags) \
 		  $(filter-out %frame-pointer,$(+cflags)) $(+gccwarn-c) \
 		  $(+extra-math-flags) $(+extra-time-flags) \

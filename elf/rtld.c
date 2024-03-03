@@ -39,6 +39,7 @@
 #include <dl-procinfo.h>
 #include <dl-prop.h>
 #include <dl-vdso.h>
+#include <dl-aslr.h>
 #include <dl-vdso-setup.h>
 #include <tls.h>
 #include <stap-probe.h>
@@ -1343,6 +1344,11 @@ dl_main (const ElfW(Phdr) *phdr,
 #ifndef HAVE_INLINED_SYSCALLS
   /* Set up a flag which tells we are just starting.  */
   _dl_starting_up = 1;
+#endif
+
+#ifdef ASLR
+  if (GLRO(dl_aslr))
+    aslr_init ((ElfW(Addr))phdr & ~((ElfW(Addr))GLRO(dl_pagesize) - 1));
 #endif
 
   const char *ld_so_name = _dl_argv[0];
@@ -2699,6 +2705,10 @@ process_envvars (struct dl_main_state *state)
 	  /* Warning level, verbose or not.  */
 	  if (memcmp (envline, "WARN", 4) == 0)
 	    GLRO(dl_verbose) = envline[5] != '\0';
+#ifdef ASLR
+	  if (memcmp (envline, "ASLR", 4) == 0)
+	    GLRO(dl_aslr) = envline[5] != '\0';
+#endif
 	  break;
 
 	case 5:
@@ -2751,12 +2761,23 @@ process_envvars (struct dl_main_state *state)
 	    _dl_show_auxv ();
 	  break;
 
-#if !HAVE_TUNABLES
+#if !HAVE_TUNABLES || defined(ASLR)
 	case 10:
+#endif
+#if !HAVE_TUNABLES
 	  /* Mask for the important hardware capabilities.  */
 	  if (!__libc_enable_secure
 	      && memcmp (envline, "HWCAP_MASK", 10) == 0)
 	    GLRO(dl_hwcap_mask) = _dl_strtoul (&envline[11], NULL);
+#endif
+#ifdef ASLR
+	  if (memcmp (envline, "ASLR_SPACE", 10) == 0)
+	    {
+	      GLRO(dl_aslr) = 1;
+	      aslr_set_space ((unsigned long)_dl_strtoul (&envline[11], NULL));
+	    }
+#endif
+#if !HAVE_TUNABLES || defined(ASLR)
 	  break;
 #endif
 
